@@ -49,11 +49,11 @@ expect(response).toEqual(message.name);
   });
   //test 11
   it("responds correctly to the mode change command", function() {
-    let commands = [new Command('MODE_CHANGE')];
+    let commands = [new Command('MODE_CHANGE', 'LOW_POWER'), new Command('MOVE', 4)];
     let message = new Message("commandCheck", commands);
     let rover = new Rover(4);
     let response = rover.receiveMessage(message);
-     expect(rover.mode).toEqual("NORMAL");
+     expect(rover.mode).toEqual("LOW_POWER");
      expect(response.results[0].completed).toEqual(true);
   })
   //test 12
@@ -65,9 +65,15 @@ expect(response).toEqual(message.name);
     expect(rover.mode).toEqual('LOW_POWER');
     expect(response.results[0].completed).toEqual(true);
     expect(rover.position).toEqual(4);
-    expect(rover.results.response[1]).toEqual(false);
+    expect(response.results[1].completed).toEqual(false);
   })
   //test 13
-  it()
+  it("responds with the position for the move command", function () {
+    let commands = [new Command('MOVE', 4)];
+    let message = new Message("commandCheck", commands);
+    let rover = new Rover(4);
+    rover.receiveMessage(message);
+    expect(rover.position).toEqual(4);
+  })
 
 });
